@@ -13,9 +13,10 @@ public class Main {
 
             Scanner sc = new Scanner(System.in);
             String status = sc.next();
-            if (status.equals("종료")) {
+            if (status.equals("등록")) {
+                app.create();
+            } else if (status.equals("종료")) {
                 app.exit();
-
             }
         }
 
@@ -23,6 +24,13 @@ public class Main {
 }
 
 class wiseSaying {
+    void create() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("명언 : ");
+        String status = sc.next();
+        System.out.print("작가 : ");
+        String author = sc.next();
+    }
     void exit() {
         System.exit(0);
     }
