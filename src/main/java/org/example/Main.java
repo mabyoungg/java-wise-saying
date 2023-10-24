@@ -17,6 +17,8 @@ public class Main {
                 app.create();
             } else if (status.equals("목록")) {
                 app.list();
+            } else if (status.startsWith("삭제?id=")) {
+                app.delete(status);
             } else if (status.equals("종료")) {
                 app.exit();
             }
@@ -76,7 +78,29 @@ class wiseSaying {
 //        }
     }
 
+    void delete(String status) {
+        int index = status.indexOf("=");
+        int findNum =  Integer.parseInt(status.substring(index+1));
+        int deleteNum = 0;
+
+        for (int i = 0; i <= list.size()-1; i++) {
+            if (list.get(i).get("번호").equals(findNum)) {
+                deleteNum = i;
+
+                list.remove(deleteNum);
+                System.out.println(findNum + "번 명언이 삭제되었습니다.");
+            } else {
+                System.out.println(findNum + "번 명언은 존재하지 않습니다.");
+            }
+
+        }
+
+
+    }
+
     void exit() {
         System.exit(0);
     }
+
+
 }
