@@ -1,6 +1,10 @@
 package org.example;
 
-import java.util.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,16 +26,20 @@ public class Main {
             } else if (status.startsWith("수정?id=")) {
                 app.update(status);
             } else if (status.equals("종료")) {
+                app.save();
                 app.exit();
             }
         }
+
 
     }
 }
 
 class wiseSaying {
     int count = 1;
-    ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+//    ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+
+    ArrayList<Map<String, Object>> list = load("data.txt");
 
     void create() {
         Map<String, Object> map = new HashMap<>();
@@ -134,8 +142,39 @@ class wiseSaying {
         }
     }
 
+    ArrayList<Map<String, Object>> load(String fileName) {
+        ArrayList<Map<String, Object>> loadedList = new ArrayList<>();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
+            loadedList = (ArrayList<Map<String, Object>>) ois.readObject();
+
+            this.count = (int)loadedList.get(loadedList.size()-1).get("번호")+1;
+
+            System.out.println("데이터를 파일에서 불러왔습니다.");
+        } catch (Exception e) {
+            System.err.println("파일 불러오기 중 오류가 발생했습니다: " + e.getMessage());
+        }
+        return loadedList;
+    }
+
+    void save() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.txt"))) {
+            oos.writeObject(list);
+            System.out.println("데이터를 파일에 저장했습니다.");
+        } catch (Exception e) {
+            System.err.println("파일 저장 중 오류가 발생했습니다: " + e.getMessage());
+        }
+    }
+
 
     void exit() {
+//        try {
+//            ObjectOutputStream ouput = new ObjectOutputStream(new FileOutputStream("./data.txt"));
+//            ouput.writeObject(list);
+//            ouput.close();
+//        } catch (Exception e) {
+//
+//        }
+
         System.exit(0);
     }
 
