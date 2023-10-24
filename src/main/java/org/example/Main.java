@@ -25,8 +25,10 @@ public class Main {
                 app.delete(status);
             } else if (status.startsWith("수정?id=")) {
                 app.update(status);
+            } else if (status.equals("빌드")) {
+                app.jsonBuild();
             } else if (status.equals("종료")) {
-                app.save();
+                app.txtSave();
                 app.exit();
             }
         }
@@ -39,22 +41,25 @@ class wiseSaying {
     int count = 1;
 //    ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
-    ArrayList<Map<String, Object>> list = load("data.txt");
+//    txt 불러오기
+//    ArrayList<Map<String, Object>> list = txtLoad("data.txt");
+//    json 불러오기
+    ArrayList<Map<String, Object>> list = jsonLoad("data.json");
 
     void create() {
         Map<String, Object> map = new HashMap<>();
 
         Scanner sc = new Scanner(System.in);
 
-        map.put("번호",count);
+        map.put("id",count);
 
         System.out.print("명언 : ");
         String word = sc.next();
-        map.put("명언",word);
+        map.put("content",word);
 
         System.out.print("작가 : ");
         String author = sc.next();
-        map.put("작가", author);
+        map.put("author", author);
 
         list.add(map);
 
@@ -69,11 +74,11 @@ class wiseSaying {
         System.out.println("--------------------");
 
         for (int i = 0; i <= list.size()-1; i++) {
-            System.out.print(list.get(i).get("번호"));
+            System.out.print(list.get(i).get("id"));
             System.out.print(" / ");
-            System.out.print(list.get(i).get("작가"));
+            System.out.print(list.get(i).get("author"));
             System.out.print(" / ");
-            System.out.println(list.get(i).get("명언"));
+            System.out.println(list.get(i).get("content"));
         }
 
 
@@ -94,7 +99,7 @@ class wiseSaying {
         int deleteNum = -1;
 
         for (int i = 0; i <= list.size()-1; i++) {
-            if (list.get(i).get("번호").equals(findNum)) {
+            if (list.get(i).get("id").equals(findNum)) {
                 deleteNum = i;
 
                 list.remove(deleteNum);
@@ -116,21 +121,22 @@ class wiseSaying {
         Scanner sc = new Scanner(System.in);
 
         for (int i = 0; i <= list.size()-1; i++) {
-            if (list.get(i).get("번호").equals(findNum)) {
+
+            if (list.get(i).get("id").equals(findNum)) {
                 updateNum = i;
                 Map<String, Object> map = new HashMap<>();
 
-                System.out.println("명언(기존) : "+list.get(updateNum).get("명언"));
+                System.out.println("명언(기존) : "+list.get(updateNum).get("content"));
                 System.out.print("명언 : ");
                 String word = sc.next();
-                map.put("명언",word);
+                map.put("content",word);
 
-                System.out.println("작가(기존) : "+list.get(updateNum).get("작가"));
+                System.out.println("작가(기존) : "+list.get(updateNum).get("author"));
                 System.out.print("작가 : ");
                 String author = sc.next();
-                map.put("작가",author);
+                map.put("author",author);
 
-                map.put("번호",findNum);
+                map.put("id",findNum);
 
                 list.set(updateNum,map);
 
@@ -142,12 +148,12 @@ class wiseSaying {
         }
     }
 
-    ArrayList<Map<String, Object>> load(String fileName) {
+    ArrayList<Map<String, Object>> txtLoad(String fileName) {
         ArrayList<Map<String, Object>> loadedList = new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
             loadedList = (ArrayList<Map<String, Object>>) ois.readObject();
 
-            this.count = (int)loadedList.get(loadedList.size()-1).get("번호")+1;
+            this.count = (int)loadedList.get(loadedList.size()-1).get("id")+1;
 
             System.out.println("데이터를 파일에서 불러왔습니다.");
         } catch (Exception e) {
@@ -156,13 +162,87 @@ class wiseSaying {
         return loadedList;
     }
 
-    void save() {
+    void txtSave() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.txt"))) {
             oos.writeObject(list);
             System.out.println("데이터를 파일에 저장했습니다.");
         } catch (Exception e) {
             System.err.println("파일 저장 중 오류가 발생했습니다: " + e.getMessage());
         }
+    }
+
+    void jsonBuild() {
+        StringBuilder jsonString = new StringBuilder("[");
+        for (Map<String, Object> map : list) {
+            jsonString.append("{");
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                jsonString.append("\"").append(entry.getKey()).append("\":\"").append(entry.getValue()).append("\",");
+            }
+            jsonString.deleteCharAt(jsonString.length() - 1); // 마지막 쉼표 제거
+            jsonString.append("},");
+        }
+        if (list.size() > 0) {
+            jsonString.deleteCharAt(jsonString.length() - 1); // 마지막 쉼표 제거
+        }
+        jsonString.append("]");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data.json"))) {
+            writer.write(jsonString.toString());
+            System.out.println("data.json 파일의 내용이 갱신되었습니다.");
+        } catch (IOException e) {
+            System.err.println("파일 저장 중 오류가 발생했습니다: " + e.getMessage());
+        }
+
+    }
+
+    ArrayList<Map<String, Object>> jsonLoad(String fileName) {
+        ArrayList<Map<String, Object>> loadedList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            StringBuilder jsonString = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonString.append(line);
+            }
+
+            loadedList = jsonStringToList(jsonString.toString());
+
+            this.count = (int)loadedList.get(loadedList.size()-1).get("id")+1;
+
+//            String count = (String) loadedList.get(loadedList.size()-1).get("id");
+//            this.count = Integer.parseInt(count) + 1;
+
+        } catch (IOException e) {
+            System.err.println("파일 불러오기 중 오류가 발생했습니다: " + e.getMessage());
+        }
+        return loadedList;
+    }
+
+    ArrayList<Map<String, Object>> jsonStringToList(String jsonString) {
+        ArrayList<Map<String, Object>> list = new ArrayList<>();
+
+        jsonString = jsonString.replace(" ", "");
+
+        String[] items = jsonString.substring(2, jsonString.length() - 2).split("\\},\\{");
+        for (String item : items) {
+            String[] keyValuePairs = item.split(",");
+            Map<String, Object> map = new HashMap<>();
+            for (String pair : keyValuePairs) {
+                String[] entry = pair.split(":");
+                String key = entry[0].trim().replace("\"", "");
+                String value = entry[1].trim().replace("\"", "");
+
+                if (key.equals("id")) {
+                    int intValue = Integer.parseInt(value);
+                    map.put(key, intValue);
+                } else {
+                    map.put(key, value);
+                }
+            }
+            list.add(map);
+        }
+
+        return list;
+
     }
 
 
@@ -177,7 +257,4 @@ class wiseSaying {
 
         System.exit(0);
     }
-
-
-
 }
