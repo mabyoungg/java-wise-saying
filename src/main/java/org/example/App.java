@@ -19,9 +19,9 @@ public class App {
                 create();
             } else if (status.equals("목록")) {
                 list();
-//            } else if (status.startsWith("삭제?id=")) {
-//                delete(status);
-//            } else if (status.startsWith("수정?id=")) {
+            } else if (status.startsWith("삭제?")) {
+                delete(status);
+//            } else if (status.startsWith("수정?")) {
 //                update(status);
 //            } else if (status.equals("빌드")) {
 //                jsonBuild();
@@ -74,37 +74,60 @@ public class App {
             System.out.printf("%d / %s / %s \n", wiseSaying.count, wiseSaying.author, wiseSaying.word);
         }
 
-
-//        Iterator<String> keys = map.keySet().iterator();
-//
-//        while (keys.hasNext()) {
-//            String key = keys.next();
-//
-//            System.out.println(count + " / " + key + " / " + map.get(key));
-//
-//            count++;
-//        }
     }
 
-//    void delete(String status) {
-//        int index = status.indexOf("=");
-//        int findNum =  Integer.parseInt(status.substring(index+1));
-//        int deleteNum = -1;
-//
-//        for (int i = 0; i <= list.size()-1; i++) {
-//            if (list.get(i).get("id").equals(findNum)) {
-//                deleteNum = i;
-//
-//                list.remove(deleteNum);
-//                System.out.println(findNum + "번 명언이 삭제되었습니다.");
-//            }
+    // ex: 삭제?id=3&type=ai&save=true
+    void delete(String status) {
+        int id = getId(status, "id", 0);
+
+//        if (id == 0) {
+//            System.out.println("존재하지 않는 ID 입니다.");
+//            return;
 //        }
-//
-//        if (deleteNum == -1) {
-//            System.out.println(findNum + "번 명언은 존재하지 않습니다.");
-//        }
-//
-//    }
+
+        try {
+            list.remove(id - 1);
+            System.out.println(id + "번 명언이 삭제되었습니다.");
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("존재하지 않는 ID 입니다.");
+        }
+
+    }
+
+    int getId(String status, String findParamName, int defaultValue) {
+        String[] statusSplit = status.split("\\?",2);
+        String param = statusSplit[1];
+
+        String[] paramSplit = param.split("&");
+
+        for (int i = 0; i < paramSplit.length; i++) {
+            String paramString = paramSplit[i];
+            String[] paramStringSplit =paramString.split("=", 2);
+
+            String paramName = paramStringSplit[0];
+            String paramValue = paramStringSplit[1];
+
+            if (paramName.equals(findParamName)) {
+                try {
+                    return Integer.parseInt(paramValue);
+                } catch (NumberFormatException e) {
+                    return defaultValue;
+                }
+            }
+        }
+
+        return defaultValue;
+    }
+
+
+
+
+
+
+
+
+
+
 //
 //    void update(String status) {
 //        int index = status.indexOf("=");
