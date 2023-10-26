@@ -17,8 +17,8 @@ public class App {
 
             if (status.equals("등록")) {
                 create();
-//            } else if (status.equals("목록")) {
-//                list();
+            } else if (status.equals("목록")) {
+                list();
 //            } else if (status.startsWith("삭제?id=")) {
 //                delete(status);
 //            } else if (status.startsWith("수정?id=")) {
@@ -60,17 +60,19 @@ public class App {
         count++;
     }
 
-//    void list() {
-//        System.out.println("번호 / 작가 / 명언");
-//        System.out.println("--------------------");
-//
-//        for (int i = 0; i <= list.size()-1; i++) {
-//            System.out.print(list.get(i).get("id"));
-//            System.out.print(" / ");
-//            System.out.print(list.get(i).get("author"));
-//            System.out.print(" / ");
-//            System.out.println(list.get(i).get("content"));
-//        }
+    void list() {
+        System.out.println("번호 / 작가 / 명언");
+        System.out.println("--------------------");
+
+        if (list.isEmpty()) {
+            System.out.println("등록된 명언이 없습니다.");
+        }
+
+        for (int i = list.size()-1 ; i >= 0; i--) {
+            WiseSaying wiseSaying = list.get(i);
+
+            System.out.printf("%d / %s / %s \n", wiseSaying.count, wiseSaying.author, wiseSaying.word);
+        }
 
 
 //        Iterator<String> keys = map.keySet().iterator();
@@ -82,7 +84,7 @@ public class App {
 //
 //            count++;
 //        }
-//    }
+    }
 
 //    void delete(String status) {
 //        int index = status.indexOf("=");
