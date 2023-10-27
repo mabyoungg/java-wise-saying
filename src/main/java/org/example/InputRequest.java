@@ -19,6 +19,11 @@ public class InputRequest {
 
         String[] statusSplit = status.split("\\?", 2);
         action = statusSplit[0].trim();
+
+        if (statusSplit.length == 1) {
+            return;
+        }
+
         queryString = statusSplit[1].trim();
 
         String[] queryStringSplit = queryString.split("&");

@@ -18,16 +18,28 @@ public class App {
 
             InputRequest inputRequest = new InputRequest(status);
 
-            System.out.println(inputRequest.getAction());
-            System.out.println(inputRequest.getIndexByParam("id",0));
+            switch (inputRequest.getAction()) {
+                case "등록":
+                    create();
+                    break;
+                case "목록":
+                    list();
+                    break;
+                case "삭제":
+                    delete(inputRequest);
+                    break;
+                case "종료":
+                    return;
+            }
 
 
-            if (status.equals("등록")) {
-                create();
-            } else if (status.equals("목록")) {
-                list();
-            } else if (status.startsWith("삭제?")) {
-                delete(status);
+
+//            if (status.equals("등록")) {
+//                create();
+//            } else if (status.equals("목록")) {
+//                list();
+//            } else if (status.startsWith("삭제?")) {
+//                delete(status);
 //            } else if (status.startsWith("수정?")) {
 //                update(status);
 //            } else if (status.equals("빌드")) {
@@ -35,7 +47,7 @@ public class App {
 //            } else if (status.equals("종료")) {
 //                txtSave();
 //                exit();
-            }
+//            }
         }
 
     }
@@ -84,8 +96,8 @@ public class App {
     }
 
     // ex: 삭제?id=3&type=ai&save=true
-    void delete(String status) {
-        int id = getId(status, "id", 0);
+    void delete(InputRequest inputRequest) {
+        int id = inputRequest.getIndexByParam("id", 0);
 
 //        if (id == 0) {
 //            System.out.println("존재하지 않는 ID 입니다.");
