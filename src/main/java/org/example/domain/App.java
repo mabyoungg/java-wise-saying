@@ -1,8 +1,6 @@
 package org.example.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
     private Scanner sc;
@@ -34,6 +32,9 @@ public class App {
                     break;
                 case "삭제":
                     delete(inputRequest);
+                    break;
+                case "수정":
+                    update(inputRequest);
                     break;
                 case "종료":
                     return;
@@ -101,6 +102,32 @@ public class App {
 
     }
 
+    private void update(InputRequest inputRequest) {
+        int id = inputRequest.getIndexByParam("id", 0);
+
+        int index = getIndexByList(id);
+
+        try {
+            WiseSaying wiseSaying = list.get(index);
+
+            System.out.printf("명언(기존): %s \n", wiseSaying.word);
+            System.out.print("명언: ");
+            String word = sc.nextLine();
+
+            System.out.printf("작가(기존): %s \n", wiseSaying.author);
+            System.out.print("작가: ");
+            String author = sc.nextLine();
+
+            wiseSaying.word = word;
+            wiseSaying.author = author;
+
+            System.out.printf("%d번 명언이 수정되었습니다. \n", id);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("존재하지 않는 ID 입니다.");
+        }
+
+    }
+
     private int getIndexByList(int id) {
 
         for (int i = 0; i < list.size(); i++) {
@@ -116,41 +143,6 @@ public class App {
     }
 
 
-//
-//    void update(String status) {
-//        int index = status.indexOf("=");
-//        int findNum =  Integer.parseInt(status.substring(index+1));
-//        int updateNum = -1;
-//
-//        Scanner sc = new Scanner(System.in);
-//
-//        for (int i = 0; i <= list.size()-1; i++) {
-//
-//            if (list.get(i).get("id").equals(findNum)) {
-//                updateNum = i;
-//                Map<String, Object> map = new HashMap<>();
-//
-//                System.out.println("명언(기존) : "+list.get(updateNum).get("content"));
-//                System.out.print("명언 : ");
-//                String word = sc.next();
-//                map.put("content",word);
-//
-//                System.out.println("작가(기존) : "+list.get(updateNum).get("author"));
-//                System.out.print("작가 : ");
-//                String author = sc.next();
-//                map.put("author",author);
-//
-//                map.put("id",findNum);
-//
-//                list.set(updateNum,map);
-//
-//                System.out.println(findNum + "번 명언이 수정되었습니다.");
-//            }
-//        }
-//        if (updateNum == -1)  {
-//            System.out.println(findNum + "번 명언은 존재하지 않습니다.");
-//        }
-//    }
 //
 //    ArrayList<Map<String, Object>> txtLoad(String fileName) {
 //        ArrayList<Map<String, Object>> loadedList = new ArrayList<>();
