@@ -1,7 +1,8 @@
 package org.example;
 
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class App {
     Scanner sc = new Scanner(System.in);
@@ -14,6 +15,12 @@ public class App {
         while (true) {
             System.out.print("명령) ");
             String status = sc.nextLine();
+
+            InputRequest inputRequest = new InputRequest(status);
+
+            System.out.println(inputRequest.getAction());
+            System.out.println(inputRequest.getIndexByParam("id",0));
+
 
             if (status.equals("등록")) {
                 create();
