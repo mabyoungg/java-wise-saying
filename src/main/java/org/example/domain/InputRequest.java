@@ -1,5 +1,6 @@
 package org.example.domain;
 
+import lombok.Getter;
 import org.example.global.util.Util;
 
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.Map;
 
 public class InputRequest {
     private String status;
+    @Getter
     private String action;
     private String queryString;
     private Map<String, String> paramsMap;
@@ -38,10 +40,6 @@ public class InputRequest {
 
             paramsMap.put(paramName, paramValue);
         }
-    }
-
-    public String getAction() {
-        return action;
     }
 
     public int getIndexByParam(String paramName, int defaultValue) {

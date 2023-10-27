@@ -82,7 +82,7 @@ public class App {
         for (int i = list.size() - 1; i >= 0; i--) {
             WiseSaying wiseSaying = list.get(i);
 
-            System.out.printf("%d / %s / %s \n", wiseSaying.count, wiseSaying.author, wiseSaying.word);
+            System.out.printf("%d / %s / %s \n", wiseSaying.getCount(), wiseSaying.getAuthor(), wiseSaying.getWord());
         }
 
     }
@@ -110,16 +110,16 @@ public class App {
         try {
             WiseSaying wiseSaying = list.get(index);
 
-            System.out.printf("명언(기존): %s \n", wiseSaying.word);
+            System.out.printf("명언(기존): %s \n", wiseSaying.getWord());
             System.out.print("명언: ");
             String word = sc.nextLine();
 
-            System.out.printf("작가(기존): %s \n", wiseSaying.author);
+            System.out.printf("작가(기존): %s \n", wiseSaying.getAuthor());
             System.out.print("작가: ");
             String author = sc.nextLine();
 
-            wiseSaying.word = word;
-            wiseSaying.author = author;
+            wiseSaying.setWord(word);
+            wiseSaying.setAuthor(author);
 
             System.out.printf("%d번 명언이 수정되었습니다. \n", id);
         } catch (IndexOutOfBoundsException e) {
@@ -133,7 +133,7 @@ public class App {
         for (int i = 0; i < list.size(); i++) {
             WiseSaying wiseSaying = list.get(i);
 
-            if (wiseSaying.count == id) {
+            if (wiseSaying.getCount() == id) {
                 return i;
             }
         }

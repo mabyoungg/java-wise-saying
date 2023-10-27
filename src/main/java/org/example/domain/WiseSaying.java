@@ -1,14 +1,19 @@
 package org.example.domain;
 
-public class WiseSaying {
-    public int count;
-    public String word;
-    public String author;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-    public WiseSaying(int count, String word, String author) {
-        this.count = count;
-        this.word = word;
-        this.author = author;
-    }
+@AllArgsConstructor
+public class WiseSaying {
+
+    @Getter
+    private int count;
+    @Getter
+    @Setter
+    private String word;
+    @Getter
+    @Setter
+    private String author;
 
 }
