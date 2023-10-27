@@ -1,50 +1,42 @@
-package org.example.domain;
+package org.example.base;
+
+import org.example.domain.wisesaying.WiseSayingController;
 
 import java.util.*;
 
 public class App {
-    private Scanner sc;
-    private int count;
-    private List<WiseSaying> list;
-
+    private Scanner scanner;
 
     public App() {
-        sc = new Scanner(System.in);
-        list = new ArrayList<>();
-        count = 1;
-        ininTestData();
-    }
 
-    void ininTestData() {
-        for (int i = 0; i < 10; i++) {
-
-            write("명언" + i, "작가" + i);
-
-        }
+        scanner = new Scanner(System.in);
 
     }
 
     public void run() {
+
         System.out.println("== 명언 앱 ==");
+
+        WiseSayingController wiseSayingController = new WiseSayingController(scanner);
 
         while (true) {
             System.out.print("명령) ");
-            String status = sc.nextLine();
+            String status = scanner.nextLine();
 
             InputRequest inputRequest = new InputRequest(status);
 
             switch (inputRequest.getAction()) {
                 case "등록":
-                    create();
+                    wiseSayingController.create();
                     break;
                 case "목록":
-                    list();
+                    wiseSayingController.list();
                     break;
                 case "삭제":
-                    delete(inputRequest);
+                    wiseSayingController.delete(inputRequest);
                     break;
                 case "수정":
-                    update(inputRequest);
+                    wiseSayingController.update(inputRequest);
                     break;
                 case "종료":
                     return;
@@ -62,102 +54,6 @@ public class App {
     //    json 불러오기
 //    ArrayList<Map<String, Object>> list = jsonLoad("data.json");
 
-
-    private void create() {
-
-        System.out.print("명언 : ");
-        String word = sc.nextLine();
-
-        System.out.print("작가 : ");
-        String author = sc.nextLine();
-
-        WiseSaying wiseSaying = write(word, author);
-
-        System.out.printf("%d번 명언이 등록되었습니다. \n", wiseSaying.getCount());
-
-    }
-
-    private void list() {
-        System.out.println("번호 / 작가 / 명언");
-        System.out.println("--------------------");
-
-        if (list.isEmpty()) {
-            System.out.println("등록된 명언이 없습니다.");
-        }
-
-        for (int i = list.size() - 1; i >= 0; i--) {
-            WiseSaying wiseSaying = list.get(i);
-
-            System.out.printf("%d / %s / %s \n", wiseSaying.getCount(), wiseSaying.getAuthor(), wiseSaying.getWord());
-        }
-
-    }
-
-    // ex: 삭제?id=3&type=ai&save=true
-    private void delete(InputRequest inputRequest) {
-        int id = inputRequest.getIndexByParam("id", 0);
-
-        int index = getIndexByList(id);
-
-        try {
-            list.remove(index);
-            System.out.println(id + "번 명언이 삭제되었습니다.");
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("존재하지 않는 ID 입니다.");
-        }
-
-    }
-
-    private void update(InputRequest inputRequest) {
-        int id = inputRequest.getIndexByParam("id", 0);
-
-        int index = getIndexByList(id);
-
-        try {
-            WiseSaying wiseSaying = list.get(index);
-
-            System.out.printf("명언(기존): %s \n", wiseSaying.getWord());
-            System.out.print("명언: ");
-            String word = sc.nextLine();
-
-            System.out.printf("작가(기존): %s \n", wiseSaying.getAuthor());
-            System.out.print("작가: ");
-            String author = sc.nextLine();
-
-            wiseSaying.setWord(word);
-            wiseSaying.setAuthor(author);
-
-            System.out.printf("%d번 명언이 수정되었습니다. \n", id);
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("존재하지 않는 ID 입니다.");
-        }
-
-    }
-
-    private WiseSaying write(String word, String author) {
-
-        int id = count;
-
-        WiseSaying wiseSaying = new WiseSaying(id, word, author);
-        list.add(wiseSaying);
-
-        count++;
-
-        return wiseSaying ;
-    }
-    private int getIndexByList(int id) {
-
-        for (int i = 0; i < list.size(); i++) {
-            WiseSaying wiseSaying = list.get(i);
-
-            if (wiseSaying.getCount() == id) {
-                return i;
-            }
-        }
-
-        return -1;
-
-    }
 
 
 //
