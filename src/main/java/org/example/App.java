@@ -83,13 +83,10 @@ public class App {
     void delete(InputRequest inputRequest) {
         int id = inputRequest.getIndexByParam("id", 0);
 
-//        if (id == 0) {
-//            System.out.println("존재하지 않는 ID 입니다.");
-//            return;
-//        }
+        int index = getIndexByList(id);
 
         try {
-            list.remove(id - 1);
+            list.remove(index);
             System.out.println(id + "번 명언이 삭제되었습니다.");
         } catch (IndexOutOfBoundsException e) {
             System.out.println("존재하지 않는 ID 입니다.");
@@ -97,7 +94,19 @@ public class App {
 
     }
 
+    int getIndexByList(int id) {
 
+        for (int i = 0; i < list.size(); i++) {
+            WiseSaying wiseSaying = list.get(i);
+
+            if (wiseSaying.count == id) {
+                return i;
+            }
+        }
+
+        return -1;
+
+    }
 
 
 //
