@@ -12,6 +12,16 @@ public class App {
         sc = new Scanner(System.in);
         list = new ArrayList<>();
         count = 1;
+        ininTestData();
+    }
+
+    void ininTestData() {
+        for (int i = 0; i < 10; i++) {
+
+            write("명언" + i, "작가" + i);
+
+        }
+
     }
 
     public void run() {
@@ -54,7 +64,6 @@ public class App {
 
 
     private void create() {
-        int id = count;
 
         System.out.print("명언 : ");
         String word = sc.nextLine();
@@ -62,13 +71,10 @@ public class App {
         System.out.print("작가 : ");
         String author = sc.nextLine();
 
-        WiseSaying wiseSaying = new WiseSaying(id, word, author);
+        WiseSaying wiseSaying = write(word, author);
 
-        list.add(wiseSaying);
+        System.out.printf("%d번 명언이 등록되었습니다. \n", wiseSaying.getCount());
 
-        System.out.println(count + "번 명언이 등록되었습니다.");
-
-        count++;
     }
 
     private void list() {
@@ -128,6 +134,17 @@ public class App {
 
     }
 
+    private WiseSaying write(String word, String author) {
+
+        int id = count;
+
+        WiseSaying wiseSaying = new WiseSaying(id, word, author);
+        list.add(wiseSaying);
+
+        count++;
+
+        return wiseSaying ;
+    }
     private int getIndexByList(int id) {
 
         for (int i = 0; i < list.size(); i++) {
