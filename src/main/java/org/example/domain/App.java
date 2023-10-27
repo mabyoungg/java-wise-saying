@@ -1,15 +1,22 @@
-package org.example;
+package org.example.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class App {
-    Scanner sc = new Scanner(System.in);
-    List<WiseSaying> list = new ArrayList<>();
-    int count = 1;
+    private Scanner sc;
+    private int count;
+    private List<WiseSaying> list;
 
-    void run() {
+
+    public App() {
+        sc = new Scanner(System.in);
+        list = new ArrayList<>();
+        count = 1;
+    }
+
+    public void run() {
         System.out.println("== 명언 앱 ==");
 
         while (true) {
@@ -45,7 +52,7 @@ public class App {
 //    ArrayList<Map<String, Object>> list = jsonLoad("data.json");
 
 
-    void create() {
+    private void create() {
         int id = count;
 
         System.out.print("명언 : ");
@@ -63,7 +70,7 @@ public class App {
         count++;
     }
 
-    void list() {
+    private void list() {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("--------------------");
 
@@ -71,7 +78,7 @@ public class App {
             System.out.println("등록된 명언이 없습니다.");
         }
 
-        for (int i = list.size()-1 ; i >= 0; i--) {
+        for (int i = list.size() - 1; i >= 0; i--) {
             WiseSaying wiseSaying = list.get(i);
 
             System.out.printf("%d / %s / %s \n", wiseSaying.count, wiseSaying.author, wiseSaying.word);
@@ -80,7 +87,7 @@ public class App {
     }
 
     // ex: 삭제?id=3&type=ai&save=true
-    void delete(InputRequest inputRequest) {
+    private void delete(InputRequest inputRequest) {
         int id = inputRequest.getIndexByParam("id", 0);
 
         int index = getIndexByList(id);
@@ -94,7 +101,7 @@ public class App {
 
     }
 
-    int getIndexByList(int id) {
+    private int getIndexByList(int id) {
 
         for (int i = 0; i < list.size(); i++) {
             WiseSaying wiseSaying = list.get(i);

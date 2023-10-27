@@ -1,20 +1,19 @@
-package org.example;
+package org.example.domain;
 
-import java.util.ArrayList;
+import org.example.global.util.Util;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class InputRequest {
-    String status;
-    String action;
-    String queryString;
-    Map<String, String> paramsMap;
-
+    private String status;
+    private String action;
+    private String queryString;
+    private Map<String, String> paramsMap;
 
 
     // ex: 삭제?id=3&type=ai&save=true
-    InputRequest(String status) {
+    public InputRequest(String status) {
         paramsMap = new HashMap<>();
 
         this.status = status;
@@ -41,21 +40,12 @@ public class InputRequest {
         }
     }
 
-    String getAction() {
+    public String getAction() {
         return action;
     }
 
     public int getIndexByParam(String paramName, int defaultValue) {
-        String paramValue = paramsMap.get(paramName);
-
-        if (paramValue != null) {
-            try {
-                return Integer.parseInt(paramValue);
-            } catch (NumberFormatException e) {
-                return defaultValue;
-            }
-        }
-        return defaultValue;
+        return Util.string.parseInt(paramsMap.get(paramName), defaultValue);
     }
 
 }
