@@ -1,19 +1,21 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InputRequest {
     String status;
     String action;
     String queryString;
-    List<String> paramNames;
-    List<String> paramValues;
+    Map<String, String> paramsMap;
+
+
 
     // ex: 삭제?id=3&type=ai&save=true
     InputRequest(String status) {
-        paramNames = new ArrayList<>();
-        paramValues = new ArrayList<>();
+        paramsMap = new HashMap<>();
 
         this.status = status;
 
@@ -35,8 +37,7 @@ public class InputRequest {
             String paramName = queryParamStringSplit[0];
             String paramValue = queryParamStringSplit[1];
 
-            paramNames.add(paramName);
-            paramValues.add(paramValue);
+            paramsMap.put(paramName, paramValue);
         }
     }
 
@@ -45,19 +46,16 @@ public class InputRequest {
     }
 
     public int getIndexByParam(String paramName, int defaultValue) {
-        int index = paramNames.indexOf(paramName);
+        String paramValue = paramsMap.get(paramName);
 
-        if (index == -1) {
-            return defaultValue;
+        if (paramValue != null) {
+            try {
+                return Integer.parseInt(paramValue);
+            } catch (NumberFormatException e) {
+                return defaultValue;
+            }
         }
-
-        String paramValue = paramValues.get(index);
-
-        try {
-            return Integer.parseInt(paramValue);
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
+        return defaultValue;
     }
 
 }

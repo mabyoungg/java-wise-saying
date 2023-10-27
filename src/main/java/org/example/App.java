@@ -32,22 +32,6 @@ public class App {
                     return;
             }
 
-
-
-//            if (status.equals("등록")) {
-//                create();
-//            } else if (status.equals("목록")) {
-//                list();
-//            } else if (status.startsWith("삭제?")) {
-//                delete(status);
-//            } else if (status.startsWith("수정?")) {
-//                update(status);
-//            } else if (status.equals("빌드")) {
-//                jsonBuild();
-//            } else if (status.equals("종료")) {
-//                txtSave();
-//                exit();
-//            }
         }
 
     }
@@ -112,37 +96,6 @@ public class App {
         }
 
     }
-
-    int getId(String status, String findParamName, int defaultValue) {
-        String[] statusSplit = status.split("\\?",2);
-        String param = statusSplit[1];
-
-        String[] paramSplit = param.split("&");
-
-        for (int i = 0; i < paramSplit.length; i++) {
-            String paramString = paramSplit[i];
-            String[] paramStringSplit =paramString.split("=", 2);
-
-            String paramName = paramStringSplit[0];
-            String paramValue = paramStringSplit[1];
-
-            if (paramName.equals(findParamName)) {
-                try {
-                    return Integer.parseInt(paramValue);
-                } catch (NumberFormatException e) {
-                    return defaultValue;
-                }
-            }
-        }
-
-        return defaultValue;
-    }
-
-
-
-
-
-
 
 
 
